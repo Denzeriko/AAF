@@ -96,7 +96,6 @@ function AAF.AddInit(tbl)
 			local st   = #k-12
 			for i=st,#k-4 do buff = buff..k[i] end
 			resource.AddWorkshop(buff)
-			debu = debu..path..f..'\n'
 			AAF.Msg('Adding addon '..k)
 		end
 	end
