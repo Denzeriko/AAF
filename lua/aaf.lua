@@ -111,7 +111,7 @@ function AAF.AddInit(tbl)
 end
 
 function AAF.LoadGit()
-    http.Fetch('https://raw.githubusercontent.com/DC144/gmod/master/AAF/data/aaf.dat',
+    http.Fetch('https://raw.githubusercontent.com/Denzeriko/AAF/master/data/aaf.dat',
         function(data)
             if #data < 30 then 
                 if AAF.Try >= 2 then AAF.Msg('Something bad happend! Abort!') return end 
@@ -132,7 +132,7 @@ end
 
 function AAF.CheckUpdate()
 	if !AAF.update then return end
-	http.Fetch('https://raw.githubusercontent.com/DC144/gmod/master/AAF/data/aaf.dat',function(data)
+	http.Fetch('https://raw.githubusercontent.com/Denzeriko/AAF/master/data/aaf.dat',function(data)
 		local a = util.JSONToTable(data)[1]
 		local b = util.JSONToTable(file.Read('aaf.dat'))[1]
 		if a != b then
