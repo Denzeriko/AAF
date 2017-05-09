@@ -1,0 +1,6 @@
+{
+"title" : "AutoAddFile AAF",
+"type" : "tool",
+"tags" : ["build","roleplay"],
+"ignore" : ["*.psd", "*.vcproj", "*.svn*"]
+}
