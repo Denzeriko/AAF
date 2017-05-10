@@ -3,9 +3,15 @@ local function OnPopulateToolPanel(panel)
 		Label = "Enable AAF",
 		Command = "aaf_enable",
 	})
+	/*
 	panel:AddControl("Button", {
 		Label = "Toggle AddFile Addons",
 		Command = "aaf_addon",
+	})
+	*/
+	panel:AddControl("Button", {
+		Label = "Toggle AddFile Workshop",
+		Command = "aaf_workshop",
 	})
 	panel:AddControl("Button", {
 		Label = "Toggle AddFile Resources",

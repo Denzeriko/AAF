@@ -4,10 +4,11 @@ AAF = {}
 
 AAF.enable    = true
 
-AAF.addon	  = true //allow addons including (only workshop!) //8192 MAX includes
-AAF.other 	  = true //allow sound/models folders to include
-AAF.update    = true //autoupdate
-AAF.massages  = true //massages in console
+AAF.addon	  = false //allow addon including 
+AAF.other 	  = true  //allow sound/models folders to include
+AAF.update    = true  //autoupdate
+AAF.worksop	  = true  //allow workshop including
+AAF.massages  = true  //massages in console
 
 //Where to search custom resources:
 AAF.include = 
@@ -24,6 +25,31 @@ AAF.blacklist =
 	'id',
 }
 
+local white =
+{
+	'.bz2',
+	//Pics
+	'.png',
+	'.jpeg',
+	'.jpg',
+	//Model
+	'.vtx',
+	'.vmt',
+	'.vtf',
+	'.vvd',
+	'.phy',
+	'.mdl',
+	'.dx90',
+	'.dx80',
+	'.sw',
+	//Res
+	'.res',
+	'.ttf',
+	'.ztmp',
+	//Sound
+	'.wav',
+	'.mp3',
+}
 //-----------------\\
 --don't touch below--
 if !file.Exists('aaf_settings.txt','DATA') then
@@ -40,11 +66,12 @@ end
 
 AAF = util.JSONToTable(file.Read('aaf_settings.txt'))
 
-concommand.Add('aaf_enable',  function(pl) Save('enable','Addon',pl)            end)
-concommand.Add('aaf_addon',   function(pl) Save('addon','Addons include',pl)    end)
-concommand.Add('aaf_other',   function(pl) Save('other','Resources include',pl) end)
-concommand.Add('aaf_massages',function(pl) Save('massages','Massages',pl)       end)
-concommand.Add('aaf_update',function(pl)   Save('update','Auto Appdata',pl)     end)
+concommand.Add('aaf_enable',  function(pl) Save('enable','Addon',pl)              end)
+concommand.Add('aaf_addon',   function(pl) Save('addon','Addons include',pl)      end)
+concommand.Add('aaf_workshop',function(pl) Save('workshop','Workshop include',pl) end)
+concommand.Add('aaf_other',   function(pl) Save('other','Resources include',pl)   end)
+concommand.Add('aaf_massages',function(pl) Save('massages','Massages',pl)         end)
+concommand.Add('aaf_update',  function(pl)   Save('update','Auto Appdata',pl)     end)
 
 concommand.Add('aaf_addid',function(pl) 
 	AAF.blacklist[id] = true 
@@ -77,11 +104,14 @@ function AAF.AddInit(tbl)
 		path=path or ''
 		local fs,ds = file.Find(path..'*','MOD')
 		for k,f in pairs(fs) do
-			if (table.HasValue(tbl,path..f) or tbl[path..f]) or AAF.blacklist[path..f] then 
-				continue end
-			AAF.Msg('Adding '..path..f)
-			resource.AddSingleFile(path..f)
-			debu = debu..path..f..'\n'
+			if (table.HasValue(tbl,path..f) or tbl[path..f]) or AAF.blacklist[path..f] then continue end
+			//for zzz,kkk in pairs(white) do
+				//if f:find(kkk) then  
+					AAF.Msg('Adding '..path..f)
+					resource.AddSingleFile(path..f)
+					debu = debu..path..f..'\n'
+				//end
+			//end
 		end 
 		for k,d in pairs(ds) do
 			read(path..d..'/') 
@@ -90,13 +120,13 @@ function AAF.AddInit(tbl)
 	
 	AAF.Msg('Adding files, server may freeze for few seconds')
 	
-	if AAF.addon then
+	if AAF.worksop then
 		for v,k in pairs(AAF.addons) do
 			local buff = ''
 			local st   = #k-12
 			for i=st,#k-4 do buff = buff..k[i] end
 			resource.AddWorkshop(buff)
-			AAF.Msg('Adding addon '..k)
+			AAF.Msg('Adding workshop '..k)
 		end
 	end
 
@@ -105,6 +135,9 @@ function AAF.AddInit(tbl)
 			AAF.Msg('Reading '..AAF.include[i])
 			read(AAF.include[i]..'/')
 		end
+		if !AAF.addon then return end
+		AAF.Msg('Reading addons')
+		read('addons/')
 	end
 	
 	file.Write('aaf_files.txt',debu)
